@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -85,5 +86,10 @@ public class ConversationService {
         conversation.getQuestions().add(question);
 
         return conversationMapper.entityToDto(conversation);
+    }
+
+    public ConversationDTO findById(Long id_conversation) {
+        Optional<ConversationEntity> conversation = conversationRepo.findById(id_conversation);
+        return conversation.map(conversationMapper::entityToDto).orElse(null);
     }
 }
