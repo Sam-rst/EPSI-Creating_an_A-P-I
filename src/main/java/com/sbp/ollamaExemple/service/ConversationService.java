@@ -67,14 +67,23 @@ public class ConversationService {
 
         }
 
+        conversationRepo.save(conversation);
+
         QuestionEntity question = QuestionEntity
                 .builder()
                 .question(question_message)
                 .response(answer)
                 .conversation(conversation)
                 .build();
-        conversationRepo.save(conversation);
+
         questionRepo.save(question);
-        return conversationMapper.entityToDto(Objects.requireNonNull(conversationRepo.findById(conversation.getId()).orElse(null)));
+
+
+        if(conversation.getQuestions() == null)
+            conversation.setQuestions(new ArrayList<>());
+
+        conversation.getQuestions().add(question);
+
+        return conversationMapper.entityToDto(conversation);
     }
 }
